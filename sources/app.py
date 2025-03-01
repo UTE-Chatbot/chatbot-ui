@@ -1,25 +1,14 @@
 import streamlit as st
 import random
 import time
-
+from core import generate_answer
 # Streamed response emulator
-def response_generator():
-    response = random.choice(
-        [
-            "Toản chưa đi tắm",
-            "Sang đi chơi với Bí",
-            "Minh Triều nhanh chóng gỡ chặn",
-            "**This is a Markdown response!** \n - Item 1 \n - Item 2 \n - Item 3",
+def response_generator(question):
+    return generate_answer(question)
 
-        ]
-    )
-    for word in response.split():
-        yield word + " "
-        time.sleep(0.05)
+st.set_page_config(page_title='HCMUTE-Chat', layout='wide', page_icon='../images/icon_1.png')
 
-st.set_page_config(page_title='HCMUTE-Chat', layout='wide', page_icon='./Apps/images/icon_1.png')
-
-st.image('./Apps/images/icon_2.png')
+st.image('../images/icon_2.png')
 st.title('TRỢ LÍ ẢO HỖ TRỢ TUYỂN SINH')
 
 # Initialize chat history
@@ -44,7 +33,7 @@ if prompt := st.chat_input("Viết câu hỏi của bạn ở đây?"):
     with st.chat_message("assistant"):
         response_container = st.empty()  
         full_response = ""  
-        for word in response_generator():
+        for word in response_generator(prompt):
             full_response += word
             response_container.markdown(full_response)  
         response = full_response.strip()  
