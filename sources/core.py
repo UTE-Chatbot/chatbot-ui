@@ -6,14 +6,15 @@ import ollama
 
 import warnings
 warnings.filterwarnings("ignore")
+import os
 
+df = pd.read_csv("./sources/update_data.csv", header=None, names=["chunk"])
 
 EMBEDDING_MODEL = "BAAI/bge-m3"
 embedding_model = SentenceTransformer(EMBEDDING_MODEL)
+embeddings = np.array(embedding_model.encode(df["chunk"].tolist(), normalize_embeddings=True))
 
-import os
 
-df = pd.read_csv("./demo4.csv")
 
 INDEX_FILE = "faiss_index.bin"
 
@@ -37,7 +38,7 @@ def retrieve_similar(query, top_k=3):
 def generate_answer(query):
     retrieved_docs = retrieve_similar(query, 4)
 
-    context = "\n".join([f"{title}: {content}" for title, content in retrieved_docs])
+    context = "\n".join([f"{content}" for content in retrieved_docs])
 
     # print(context)
     print('retrieved_context: \n: ', context)

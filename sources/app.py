@@ -6,9 +6,9 @@ from core import generate_answer
 def response_generator(question):
     return generate_answer(question)
 
-st.set_page_config(page_title='HCMUTE-Chat', layout='wide', page_icon='../images/icon_1.png')
+st.set_page_config(page_title='HCMUTE-Chat', layout='wide', page_icon='./images/icon_1.png')
 
-st.image('../images/icon_2.png')
+st.image('./images/icon_2.png')
 st.title('TRỢ LÍ ẢO HỖ TRỢ TUYỂN SINH')
 
 # Initialize chat history
