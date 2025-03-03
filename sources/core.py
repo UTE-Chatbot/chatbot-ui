@@ -1,12 +1,21 @@
+import os
 import faiss
+import ollama
+import warnings
 import numpy as np
 import pandas as pd
+import google.generativeai as genai
 from sentence_transformers import SentenceTransformer
-import ollama
 
-import warnings
+
+
 warnings.filterwarnings("ignore")
-import os
+
+
+GOOGLE_API_KEY = "AIzaSyBNMDBIw8EgbJdVSR8_io747BJn-JssUiU"
+genai.configure(api_key=GOOGLE_API_KEY)
+model = genai.GenerativeModel(model_name = "gemini-1.5-pro")
+model
 
 df = pd.read_csv("./sources/update_data.csv", header=None, names=["chunk"])
 
@@ -38,11 +47,14 @@ def generate_answer(query):
 
     context = "\n".join( retrieved_docs)
 
-    print(context)
-    #print('retrieved_context: \n: ', context)
-    #print('\n\n\ --- \n\n')
+    #print(context)
+    print('retrieved_context: \n: ', context)
+    print('\n\n\ --- \n\n')
     
-    prompt = f"\Câu hỏi: {query}\nCâu trả lời:"
-    response = ollama.chat(model='hf.co/bartowski/Llama-3.2-1B-Instruct-GGUF', messages=[{"role": "user", "content": prompt}])
-    return response["message"]["content"]
+    prompt = f"Đây là một trợ lí tư vấn tuyển sinh cho trường Đại học Sư phạm Kỹ thuật TP.HCM (HCMUTE), trả lời các câu hỏi về ngành nghề, thắc mắc về trường cho học sinh, trả lời đầy đủ ý, chính xác, logic, ngắn gọn \Câu hỏi: {query}\nCâu trả lời:"
+    #response = ollama.chat(model='mistral', messages=[{"role": "user", "content": prompt}])
+    #return response["message"]["content"]
+
+    response = model.generate_content(prompt)
+    return response.text
 
